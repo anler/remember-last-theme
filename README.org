@@ -1,0 +1,24 @@
+* Remember Last Theme
+
+  This package saves your currently loaded theme into a file, and uses
+  that to remember to load the same theme next time you open Emacs.
+
+** Installation
+   
+*** Manual
+
+    Download =remember-last-theme.el= to some place in your emacs' load
+    path and add the following to your emacs' initialization file:
+   #+BEGIN_SRC elisp
+     (require 'remember-last-theme)
+   #+END_SRC
+
+*** With =use-package=
+
+   #+BEGIN_SRC elisp
+     (use-package remember-last-theme :ensure t)
+   #+END_SRC
+
+** Usage
+
+   [[https://raw.githubusercontent.com/anler/remember-last-theme/master/remember-last-theme.gif]]
