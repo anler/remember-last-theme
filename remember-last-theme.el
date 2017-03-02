@@ -29,49 +29,19 @@
 ;; select a theme, it's saved into a file that is read and activated
 ;; the next time you open Emacs.
 ;;
-;; Customizable options are:
-;;  remember-last-theme-filename
-;;
 ;; Usage:
 ;;  (require 'remember-last-theme)
 ;;
 ;;; Code:
+(require 'cus-edit)
 
-(defgroup remember-last-theme nil
-  "Remember the last used theme."
-  :group 'customize)
-
-(defcustom remember-last-theme-filename
-  (format "%s%s" user-emacs-directory "remember-last-theme.txt")
-  "Filename where the current theme is saved."
-  :group 'remember-last-theme)
-
-(advice-add 'load-theme :after #'remember-last-theme-save-theme)
-(advice-add 'disable-theme :after #'remember-last-theme-save-default-theme)
-
-(defun remember-last-theme-save-default-theme (disabled-theme)
-  (remember-last-theme-save-theme 'default))
-
-(defun remember-last-theme-save-theme (theme &optional no-confirm no-enable)
-  (with-temp-buffer
-    (insert (symbol-name theme))
-    (if (file-writable-p remember-last-theme-filename)
-      (write-region (point-min)
-                    (point-max)
-                    remember-last-theme-filename)
-      (message "`remember-last-theme-filename' is not writable!"))))
-
-(defun remember-last-theme-load-saved-theme ()
+(defun remember-last-theme-save ()
+  "Save the current theme for next sessions."
   (interactive)
-  (if (file-exists-p remember-last-theme-filename)
-    (let ((theme (intern (with-temp-buffer
-                           (insert-file-contents remember-last-theme-filename)
-                           (buffer-string)))))
-      (unless (eq theme 'default)
-        (load-theme theme :no-confirm)))
-    (message "Couldn't load saved theme. `remember-last-theme-filename' not found.")))
+  (customize-save-variable 'custom-enabled-themes custom-enabled-themes))
 
-(add-hook 'after-init-hook #'remember-last-theme-load-saved-theme)
+(add-hook 'kill-emacs-hook 'remember-last-theme-save)
+(add-hook 'after-init-hook (lambda () (load custom-file)))
 
 (provide 'remember-last-theme)
 ;;; remember-last-theme.el ends here
