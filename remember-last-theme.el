@@ -25,23 +25,27 @@
 ;;
 ;;; Commentary:
 ;;
-;; Remember the last used theme between Emacs sessions. Each time you
-;; select a theme, it's saved into a file that is read and activated
-;; the next time you open Emacs.
+;; Remember the last used theme between Emacs sessions. When you quit
+;; Emacs, the current theme settings will be stored as if they had
+;; been set using `customize-themes'.
 ;;
 ;; Usage:
-;;  (require 'remember-last-theme)
+;;  (require 'remember-last-theme) ; if installed manually
+;;  (remember-last-theme-enable)
 ;;
 ;;; Code:
 (require 'cus-edit)
 
 (defun remember-last-theme-save ()
-  "Save the current theme for next sessions."
+  "Save the current theme(s) for next sessions."
   (interactive)
   (customize-save-variable 'custom-enabled-themes custom-enabled-themes))
 
-(add-hook 'kill-emacs-hook 'remember-last-theme-save)
-(add-hook 'after-init-hook (lambda () (load custom-file)))
+;;;###autoload
+(defun remember-last-theme-enable ()
+  "Ensure that the current theme(s) will be saved when Emacs exits."
+  (interactive)
+  (add-hook 'kill-emacs-hook 'remember-last-theme-save))
 
 (provide 'remember-last-theme)
 ;;; remember-last-theme.el ends here
