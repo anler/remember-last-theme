@@ -21,6 +21,7 @@
    #+BEGIN_SRC elisp
      (require 'remember-last-theme)
      (remember-last-theme-enable)
+     ; (load custom-file) if you are not doing it already
    #+END_SRC
 
 **** With =use-package=
@@ -28,7 +29,9 @@
    #+BEGIN_SRC elisp
      (use-package remember-last-theme
        :ensure t
-       :config (remember-last-theme-enable))
+       :config (remember-last-theme-enable)
+               ; (load custom-file) if you are not doing it already
+       )
    #+END_SRC
 
 *** Using an external file
